@@ -1,0 +1,10 @@
+.small-post {
+  margin: 0 auto;
+  width: 100%;
+  padding: 10px;
+  border: 1px solid black;
+  border-radius: 5px;
+  box-shadow: 0 2px 3px #ccc;
+  margin-bottom: 10px;
+  word-wrap: break-word;
+}

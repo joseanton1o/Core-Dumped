@@ -1,0 +1,22 @@
+{
+  "name": "awa-project",
+  "version": "1.0.0",
+  "description": "System that lets users register, login and post new code snippets. Non-authenticated users can see all the content, but they cannot post, edit, or comment items.",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "client": "npm run start --prefix client",
+    "server": "npm run dev --prefix server",
+    "dev": "concurrently \"npm run server\" \"npm run client\""
+  },
+  "author": "José Antonio Pérez Lara",
+  "license": "MIT",
+  "dependencies": {
+    "concurrently": "^7.6.0",
+    "jquery": "^3.6.3",
+    "materialize-css": "^1.0.0-rc.2"
+  },
+  "devDependencies": {
+    "@types/jquery": "^3.5.16"
+  }
+}
