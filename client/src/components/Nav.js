@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom';
-const Nav = ({jwt}) => {
+const Nav = ({jwt,user}) => {
 
   
   return (
@@ -16,6 +16,12 @@ const Nav = ({jwt}) => {
           {!jwt && 
           <li><Link to="/register">Register</Link></li>
           }
+          {jwt &&
+          <li><Link to={"/profile/"+user.username}>Profile</Link></li>}
+          {jwt &&
+          <li><Link to="/post/ask">Ask</Link></li>}
+          {jwt &&
+          <li><Link to="/logout">Log Out</Link></li>}
           <li>
             <Link to="/">Home</Link>
           </li>
@@ -23,9 +29,15 @@ const Nav = ({jwt}) => {
       </div>
     </nav>
     <ul className='sidenav' id="mobile-demo">
-        { 
+        { // AÑADIR EL PERFIL
         !jwt && <li><Link to="/login">Login</Link></li>
         }
+                  {jwt &&
+          <li><Link to={"/profile/"+user.username}>Profile</Link></li>}
+          {jwt &&
+          <li><Link to="/post/ask">Ask</Link></li>}
+          {jwt &&
+          <li><Link to="/logout">Log Out</Link></li>}
         {!jwt && <li>
           <Link to="/register">Register</Link>
         </li>}

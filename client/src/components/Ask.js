@@ -1,31 +1,13 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+
 const Ask = ({user, jwt}) => {
     const navigate = useNavigate()
 
     const [title, setTitle] = useState('')
     const [body, setBody] = useState('')
-
-
-    useEffect(() => {
-        // Create a fetch request to check if the jwt token is valid
-        // If it is, then the user is logged in
-        // If it is not, then the user is not logged in and should be redirected to the login page
-
-        fetch('/users/check', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': jwt
-            }
-        })
-        .then(res => {
-            if (res.status === 401) { // If the user is not logged in
-                navigate('/login')
-            }
-        })
-    }, [])
-
+    const [open, setOpen] = useState(false)
+    const closeModal = () => setOpen(false)
     const handleChange = (e) => {
         console.log(e.target.name)
         if (e.target.name === 'title') {
@@ -37,7 +19,11 @@ const Ask = ({user, jwt}) => {
 
     const submit = (e) => {
         e.preventDefault()
-
+        if (title === '' || body === '') {
+            console.log('Title or body is empty')
+            setOpen(true)
+            return;
+        }
         fetch(' http://localhost:5000/posts/', {
             method: 'POST',
             headers: {
@@ -54,6 +40,12 @@ const Ask = ({user, jwt}) => {
         .then(res => {
             if (res.status === 401) {
                 console.log('Unauthorized')
+                let theresToken = localStorage.getItem('jwt') === null ? false : true;
+                if (theresToken) { // Then the token is either expired or invalid 
+                    localStorage.removeItem('jwt');
+                    localStorage.removeItem('user'); // If there is a token, then there is a user with it
+                }
+
                 navigate('/login')
             }
             return res.json();
@@ -63,21 +55,26 @@ const Ask = ({user, jwt}) => {
             console.log(data.id)
             console.log(data._id)
             navigate('/post/' + data.id);
-                
-            
         })
     }
 
 
     return (
         <>
-        <div>Ask</div>
+        <h4>Ask</h4>
+        {open && <div className='popUp'>
+            <div className='popUp-content'>
+                <h5 className='error-msg'>Title or body is empty</h5>
+                <button className='btn error' onClick={closeModal}>Close</button>
+            </div>
+        </div>
+        }
         <form action='' method='POST' onChange={handleChange} onSubmit={submit}>
             <input type="text" name="title" placeholder="Title" />
-            <textarea name="body" placeholder="Body" />
-
-            <button type="submit">Submit</button>
+            <textarea name="body" placeholder="Body" cols="50" />
+            <button type="submit" className='btn'>Submit</button>
         </form>
+
         </>
     )
 }

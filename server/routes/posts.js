@@ -79,6 +79,7 @@ router.post('/comment', checkAuth, (req,res,next) => {
             // Now we create the comment and add it to the post
             Comment.create({
                 CreatorId: user._id,
+                PostId: post._id,
                 Comment: req.body.content,
                 DateCreated: Date.now()
             }, (err, comment) => {
@@ -140,5 +141,7 @@ router.get('/:post_id', (req,res,next) => {
     });
 
 });
+
+/* GET a post from a comment id */
 
 module.exports = router;

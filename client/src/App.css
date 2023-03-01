@@ -1,4 +1,4 @@
-.small-post {
+.small-post  {
   margin: 0 auto;
   width: 100%;
   padding: 10px;
@@ -7,4 +7,103 @@
   box-shadow: 0 2px 3px #ccc;
   margin-bottom: 10px;
   word-wrap: break-word;
+}
+
+
+.post{
+  margin-top: 15px;
+  width: 100%;
+  padding: 10px;
+  border: 1px solid black;
+  border-radius: 5px;
+  box-shadow: 0 2px 3px #ccc;
+  margin-bottom: 10px;
+  word-wrap: break-word;
+}
+
+.post-comment{
+  margin: 0 auto;
+  width: 100%;
+  padding: 10px;
+  border: 1px solid black;
+  border-radius: 5px;
+  box-shadow: 0 2px 3px #ccc;
+  margin-bottom: 10px;
+  word-wrap: break-word;
+}
+
+.material-icons:hover{
+  /* Put a hand cursor on the icons when hovering */
+  cursor: pointer;
+
+}
+.error-msg{
+  /* Add a red color to the error message */
+  color: red;
+  background-color: #f4f4f4;
+  padding: 10px;
+  margin: 10px;
+  /* Justify the text to the center */
+  text-align: center;
+
+}
+.own-prof{
+  /* Add a tourquoise color to the text */
+  color: #00bfa5;
+}
+/* Select the button that has class btn and error */
+.btn.error {
+  /* Add a red color to the button */
+  background-color: red;
+  /* Add a white color to the text */
+  color: white;
+}
+.btn.error:hover {
+  /* Add a red color to the button */
+  background-color: red;
+  /* Add a white color to the text */
+  color: white;
+}
+/*center all buttons that are children of class popUp-content*/
+.popUp-content > button {
+  margin: 0 auto;
+  display: block;
+}
+
+.profile-post, .profile-comment {
+  margin: 0 auto;
+  width: 100%;
+  padding: 10px;
+  border: 1px solid black;
+  border-radius: 5px;
+  box-shadow: 0 2px 3px #ccc;
+  margin-bottom: 10px;
+  word-wrap: break-word;
+}
+
+/* Select pagination class and center buttons that are inside it 
+so they are centered vertically but not horizontally
+*/
+.pagination {
+  display: flex;
+  align-items: center;
+  
+}
+/* Select first child of pagination class and add margin left*/
+.pagination:first-child {
+  margin-left: 20px;
+}
+
+.pagination:last-child > .pag-btn {
+  margin-right: 0;
+}
+
+.pag-nav{
+  /* bottom margin of 20px */
+  margin-bottom: 20px;
+
+}
+
+.pag-btn{
+  margin-right: 20px;
 }
