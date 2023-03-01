@@ -4,7 +4,7 @@ import moment from 'moment/moment';
 import Comment from './Comment';
 import Comments from './Comments';
 import { Link, useLocation } from 'react-router-dom';
-
+// full display of a post
 const Post = ({jwt, user}) => {
     // found this here: https://stackoverflow.com/questions/58409783/how-to-get-the-current-url-in-react-router
     const loc = useLocation();
@@ -43,9 +43,10 @@ const Post = ({jwt, user}) => {
                     moment(post.DateCreated).format('MMMM Do YYYY, h:mm:ss a').replace('T', ' ').split('.')[0]
                 }</p>
             </div>
-            <div className="comments">
-                <Comments comments={comments} cilcked={() => {}} classes={"post-comment"}/>
+            <div className="comments"> {/* This is the comments section */}
+                <Comments comments={comments} cilcked={() => {}} classes={"post-comment pm"}/>
             </div>
+            {/* Make a new comment to the post you are in */}
             <Comment jwt={jwt} user={user} postId={loc.pathname.split('/')[2]} />
         </>
     )

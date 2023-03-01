@@ -2,7 +2,7 @@ import React from 'react'
 import {useState} from 'react'
 import { Buffer } from 'buffer';
 import { useNavigate } from 'react-router-dom';
-
+// Login component
 const Login = ({setJwt, setUser}) => {
     // Here we store userData to send in the login
     const [userData, setUserData] = useState({});
@@ -11,26 +11,24 @@ const Login = ({setJwt, setUser}) => {
     const submit = (e) => {
         e.preventDefault();
         
-        if (userData === {})
-        console.log('empty')
-    //
-    if (userData.email === undefined || userData.password === undefined) {
-        setError('Please fill in all fields');
-        return;
-    }
-
+        // Check if the user filled in all the fields
+        if (userData.email === undefined || userData.password === undefined) {
+            setError('Please fill in all fields');
+            return;
+        }
+        // Send the data to the server
         fetch("/users/login", {
             method: "POST",
             headers: {
                 "Content-type":"application/json"
             },
             body: JSON.stringify(userData),
-            mode:"cors" //??
+            mode:"cors" // allow cors as we are using it in the backend
         })
             .then(response =>{
                 console.log(response.body)
                 if (response.status === 401) {
-                    setError('Login failed');
+                    setError('Login failed'); // If the login failed, we will display an error message, not telling the user that the email or password is wrong, because that would be a security issue
                 }
                 
                 return response.json()
@@ -44,8 +42,7 @@ const Login = ({setJwt, setUser}) => {
 
                     setJwt(data.token) // So when navigating to a new page, the jwt is still there and the user is logged in
                     setUser(JSON.parse(Buffer.from(data.token.split(".")[1], "base64").toString()))
-                    // Refresh the page
-
+                    // Redirect the user to the home page
                     navigate('/')
 
                 }

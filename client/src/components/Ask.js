@@ -1,6 +1,7 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
+// This is the component that will be used to ask a question, to post a question in the forum, user has to be logged in, so we will get the user and jwt from the local storage
 const Ask = ({user, jwt}) => {
     const navigate = useNavigate()
 
@@ -16,6 +17,14 @@ const Ask = ({user, jwt}) => {
             setBody(e.target.value)
         }
     }
+    // If the user is not logged in, then we will redirect him to the login page, jwt and user are passed as props from the App.js, there they are retrieved from the local storage 
+    useEffect(() => {
+        console.log('jwt: ' + jwt)
+        console.log('user: ' + user)
+        if (user === null || jwt === '') {
+            navigate('/login')
+        }
+    }, [jwt, navigate])
 
     const submit = (e) => {
         e.preventDefault()
@@ -24,6 +33,8 @@ const Ask = ({user, jwt}) => {
             setOpen(true)
             return;
         }
+
+
         fetch(' http://localhost:5000/posts/', {
             method: 'POST',
             headers: {
@@ -35,7 +46,7 @@ const Ask = ({user, jwt}) => {
                 content: body,
                 username: user.username
             }),
-            mode: 'cors'
+            mode: 'cors' // because we are using cors in the backend
         })
         .then(res => {
             if (res.status === 401) {

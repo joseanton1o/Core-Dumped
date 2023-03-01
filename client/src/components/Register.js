@@ -1,6 +1,8 @@
 import React from 'react'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+
+// Register component, similar to the login component
 const Register = () => {
     // Here we store userData to send in the login
     const [userData, setUserData] = useState({});
@@ -24,7 +26,7 @@ const Register = () => {
                 "Content-type":"application/json"
             },
             body: JSON.stringify(userData),
-            mode:"cors" //??
+            mode:"cors" 
         })
             .then(response => {
                 if (response.status === 403) {
@@ -49,7 +51,7 @@ const Register = () => {
             <form onSubmit={submit} onChange={handleChange}>
                 <input type="email" name="email" placeholder='Email' />
                 <input type="text" name="username" placeholder='Username' />
-                <input type="password" name="password" />
+                <input type="password" name="password" placeholder='Password' />
                 <input type="submit" className='btn' value="Submit"/>
             </form>
         </div>

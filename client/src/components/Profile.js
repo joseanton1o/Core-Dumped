@@ -39,7 +39,21 @@ const Profile = () => {
   }
 
   useEffect(() => {
-
+    const checkIfLoggedUser = () => {
+      const username = loc.pathname.split('/')[2];
+      
+          console.log(loc.pathname.split('/')[2])
+          // Get user from local storage
+          const loggedUserJSON = localStorage.getItem('user');
+          console.log(loggedUserJSON, 'logged user json')
+          if (loggedUserJSON) {
+            const LoggedUser = JSON.parse(loggedUserJSON);
+            setLoggedUser(LoggedUser);
+            if (LoggedUser.username === username){
+              setIsLoggedUser(true);
+            }
+          }
+    }
     const username = loc.pathname.split('/')[2];
     console.log(loc.pathname.split('/')[2])
 
@@ -48,7 +62,7 @@ const Profile = () => {
       headers: {
         'Content-Type': 'application/json',
       },
-      mode: 'cors', // cors is used in order to allow cross origin requests
+      mode: 'cors', 
       cache: 'default'
     })
     .then(res => {
@@ -67,28 +81,15 @@ const Profile = () => {
       console.log(user)
 
       setLoading(false);
-      checkIfLoggedUser();
+      checkIfLoggedUser(); // Check if the user that is logged in is the same as the user that is being viewed so that the edit profile button can be shown
     })
-
+    // next line is to stop the warning about not including the dependencies, I don't want to include the dependencies as I only want this to run once
+  // eslint-disable-next-line react-hooks/exhaustive-deps 
   }, [])
 
-  const checkIfLoggedUser = () => {
-    const username = loc.pathname.split('/')[2];
-    
-        console.log(loc.pathname.split('/')[2])
-        // Get user from local storage
-        const loggedUserJSON = localStorage.getItem('user');
-        console.log(loggedUserJSON, 'logged user json')
-        if (loggedUserJSON) {
-          const LoggedUser = JSON.parse(loggedUserJSON);
-          setLoggedUser(LoggedUser);
-          if (LoggedUser.username === username){
-            setIsLoggedUser(true);
-          }
-        }
-  }
 
-  const bioPressed = () => {
+
+  const bioPressed = () => { // When the bio is pressed the bio is set to editable
     setAddingBio(true);
     console.log(addingBio)
     if (user.bio) {
@@ -178,6 +179,9 @@ const Profile = () => {
             </div>
             )
           }
+          {/* 
+            If the user is logged in and has a bio, then the edit bio button is shown, if it doesn't have a bio then the add bio button is shown, both buttons do the same thing is just a matter of the text that is shown
+          */}
           {isLoggedUser && user.Bio && !addingBio && (
             <button className="btn" onClick={bioPressed}> Edit Bio </button>
           )}
@@ -186,6 +190,9 @@ const Profile = () => {
           )}
 
           <div className="profile-content row">
+            {
+              // In small screens the posts and comments are shown in a column, in large screens they are shown in two columns one for posts and one for comments
+            }
             <div className="col s12 l6">
               <h2> User posts </h2>
               {user.Posts.length > 0 && <PostPreview posts={user.Posts} clicked={post_clicked} />}
@@ -198,6 +205,9 @@ const Profile = () => {
           </div>
         </div>
       )}
+      {
+        // User not found or something went wrong
+      }
       {error && (
         <div className="profile">
           <h2>{error}</h2>

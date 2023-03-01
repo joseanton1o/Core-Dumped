@@ -30,10 +30,9 @@ router.get('/', async function(req, res, next) {
 });
 
 /* POST create a post */
-// TODO: Add checkAuth middleware to this route, so only logged in users can create posts
 // Get username from the jwt token and use it to get the user id 
 router.post('/', checkAuth, (req,res,next) => {
-    // This is a temporary solution, we will maybe use the jwt token to get the user id
+    // Another way to do this is checking the json web token and getting the username from it, then finding the user with that username and getting the id from the user, but both ways are fine so i sticked with this one which i implemented earlier
     User.findOne({Username: req.body.username}, (err, user) => {
         if (err) throw err;
         if (!user) return res.status(401).json({
@@ -44,7 +43,7 @@ router.post('/', checkAuth, (req,res,next) => {
             CreatorId: user._id ,
             Title: req.body.title,
             Content: req.body.content,
-            Comments: [],
+            Comments: [], // This is an array of comment ids
             DateCreated: Date.now()
         }, (err, post) => {
             if (err) throw err;

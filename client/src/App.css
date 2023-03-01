@@ -9,29 +9,45 @@
   word-wrap: break-word;
 }
 
-
 .post{
   margin-top: 15px;
-  width: 100%;
+  width: 80%;
+  margin-right: 10%;
+  margin-left: 10%;
   padding: 10px;
   border: 1px solid black;
   border-radius: 5px;
   box-shadow: 0 2px 3px #ccc;
   margin-bottom: 10px;
   word-wrap: break-word;
-}
+  font-size: large;
+} 
 
 .post-comment{
   margin: 0 auto;
-  width: 100%;
+  width: 50%;
   padding: 10px;
   border: 1px solid black;
   border-radius: 5px;
   box-shadow: 0 2px 3px #ccc;
   margin-bottom: 10px;
   word-wrap: break-word;
+  font-size: small;
 }
-
+@media screen and (max-width: 600px) {
+  .post{
+    width: 100%;
+    margin: 0px;
+    margin-top: 15px;
+    margin-bottom: 15px;
+  }
+  .post-comment{
+    width: 100%;
+    margin: 0px;
+    margin-top: 15px;
+    margin-bottom: 15px;
+  }
+}
 .material-icons:hover{
   /* Put a hand cursor on the icons when hovering */
   cursor: pointer;

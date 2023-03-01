@@ -3,18 +3,21 @@ import {useState, useEffect} from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import PostPreview from './PostPreview'
 import Pagination from './Pagination'
+
+// Home component, this is the home page, it will show all the posts, it will be used in the App.js component, it will be passed the user and jwt as props from the App.js component, which will get them from the local storage, here we will use the user and jwt to check if the user is logged in, if he is logged in, then we will show different options in the navbar. In this component we will show all the posts, we will use the PostPreview component to show the posts, we will also use the Pagination component to paginate the posts.
 const Home = ({user, jwt}) => {
     const navigate = useNavigate()
 
 
     // Pagination code is brought from here: https://github.com/bradtraversy/simple_react_pagination
-    const [posts, setPosts] = useState([]);
-    const [currentPage, setCurrentPage] = useState(1);
-    const [postPerPage] = useState(10);
+    const [posts, setPosts] = useState([]); // Posts array, this will be used to store all the posts
+    const [currentPage, setCurrentPage] = useState(1); // Current page, when the page loads, we will show the first page
+    const [postPerPage] = useState(10); // Number of posts per page
 
 
 
     useEffect(() => {
+        // Get all the posts
         fetch('http://localhost:5000/posts', // This gets all the posts with the creator username in the response
         {
             method: 'GET',
@@ -45,11 +48,11 @@ const Home = ({user, jwt}) => {
     }
 
     // Get current posts, got this from here: https://www.youtube.com/watch?v=IYCa1F-OWmk
-    const indexOfLastPost = currentPage * postPerPage;
-    const indexOfFirstPost = indexOfLastPost - postPerPage;
-    const currentPosts = posts.slice(indexOfFirstPost, indexOfLastPost);
+    const indexOfLastPost = currentPage * postPerPage; // Index of the last post, 10 for the first page, 20 for the second page, etc.
+    const indexOfFirstPost = indexOfLastPost - postPerPage; // Index of the first post, 0 for the first page, 10 for the second page, etc.
+    const currentPosts = posts.slice(indexOfFirstPost, indexOfLastPost); // Slice the posts array to get the posts for the current page, slice will return an array that starts with the first param and ends with the second param - 1, so for the first page will return 0,1,2,...,9 
 
-    // Change page
+    // Change page function, allows us to change the page
     const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
     return (

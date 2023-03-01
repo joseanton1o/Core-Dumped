@@ -37,6 +37,7 @@ function App() {
     let sidenav = document.querySelector('.sidenav');
     M.Sidenav.init(sidenav, {});
   }, [])
+  // I used react router to make the app a single page application
   return (
     <Router>
       <div className="App">
