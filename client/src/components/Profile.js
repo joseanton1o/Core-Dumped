@@ -140,7 +140,9 @@ const Profile = ({ setUser, setJwt}) => {
             }
             navigate('/login')
           } else if (res.status === 403) {
+            console.log('Forbidden')
             setError('Your bio is too long, please keep it under 1000 characters');
+            setAddingBio(false);
           }
           return res.json();
     })
@@ -168,7 +170,7 @@ const Profile = ({ setUser, setJwt}) => {
       }
       {error && (
         <div className="profile">
-          <h2>{error}</h2>
+          <h2 className='error-msg'>{error}</h2>
         </div>
       )}
       {user && (
