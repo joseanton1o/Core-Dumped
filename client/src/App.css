@@ -35,6 +35,10 @@
   font-size: small;
 }
 @media screen and (max-width: 600px) {
+  html, body {
+    max-width: 100%;
+    overflow-x: hidden;
+  }
   .post{
     width: 100%;
     margin: 0px;
@@ -46,6 +50,9 @@
     margin: 0px;
     margin-top: 15px;
     margin-bottom: 15px;
+  }
+  a.brand-logo{
+    font-size: small;
   }
 }
 .material-icons:hover{

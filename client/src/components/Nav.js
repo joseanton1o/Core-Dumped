@@ -47,7 +47,7 @@ const Nav = ({ setJwt, setUser ,jwt,user}) => {
     <>
     <nav>
       <div className='red nav-wrapper'>
-        <Link to="/" className='brand-logo center'>Core Dumped Exception</Link>
+        <Link to="/" className='brand-logo center'>Core Dumped</Link>
         {
           // a tag is a little trick to make the menu button work, it is not a link, it is a button that opens the menu which i know is not the best way to do it but it works and it is how the materializecss.com nav bar works
         }
