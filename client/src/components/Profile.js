@@ -105,7 +105,7 @@ const Profile = ({ setUser, setJwt}) => {
         setBio(e.target.value)
     } 
   }
-
+  // Submmiting an empty bio means to delete the bio
   const submitBio = (e) => {
     e.preventDefault();
     console.log(user)
