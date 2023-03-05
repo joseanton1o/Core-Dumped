@@ -24,9 +24,7 @@ const Ask = ({ setJwt , setUser ,user, jwt}) => {
     }
     // If the user is not logged in, then we will redirect him to the login page, jwt and user are passed as props from the App.js, there they are retrieved from the local storage 
     useEffect(() => {
-        if (!jwt || !user) { // If there is no jwt or user, then the user is not logged in
-            navigate('/login')
-        }
+        let username = user === null ? "NULL" : user.username;
         // Check validity of the token
         fetch('http://localhost:5000/users/check', {
             method: 'POST',
@@ -35,7 +33,7 @@ const Ask = ({ setJwt , setUser ,user, jwt}) => {
                 'Authorization': jwt
             },
             body: JSON.stringify({
-                username: user.username
+                username: username
             }),
             mode: 'cors' // because we are using cors in the backend
         })

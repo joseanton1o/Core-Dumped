@@ -33,7 +33,11 @@ const Register = () => {
                     setError('Email or username already exists');
                 }else if  (response.status === 400)
                 {
-                    setError('Email or username is too long');
+                    // Access the response body and parse it as JSON using a promise
+                    response.json().then(data => {
+                        console.log(data);
+                        setError(data.message);
+                    }); // This is done because response.json() returns a promise and we need to wait for it to resolve
                 }
                 if (response.status === 200){
                     navigate('/login');

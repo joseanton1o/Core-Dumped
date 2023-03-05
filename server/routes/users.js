@@ -27,6 +27,11 @@ router.post('/register', (req,res,next) => {
             message: 'Email or username is too long'
         });
     }
+    if (req.body.username === "NULL") {
+        return res.status(400).json({ // bad request
+            message: 'Username cannot be "NULL"'
+        });
+    }
 
     User.findOne({Email:req.body.email}, (err, user) => {
         if (err) throw err;
