@@ -20,6 +20,7 @@ router.get('/', function(req, res, next) {
 /* POST user registration */
 /* This route is not protected, anyone can register 
     We will check if the email or username already exists, if not, then we will create the user
+    If success the route will return a status 200 so the front-end can navigate to the log in page
 */
 router.post('/register',
             body('email').isEmail(),
