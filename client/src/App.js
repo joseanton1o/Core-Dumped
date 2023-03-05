@@ -22,6 +22,9 @@ function App() {
   // and 
   // https://stackoverflow.com/questions/67295681/react-componentdidmount-parsing-error-missing-semicolon
   useEffect(() => {
+    // It is mandatory to initialize the sidenav before the setControlVar to false, otherwise the sidenav will not work
+    let sidenav = document.querySelector('.sidenav');
+    M.Sidenav.init(sidenav, {});
 
     setControlVar(false);
 
@@ -34,8 +37,6 @@ function App() {
     setControlVar(true);
     // Check if the token is valid will be done in the nav bar component as well as in every component that is protected because if the page is not refreshed, the token will not be checked if we do it only in the nav bar
 
-    let sidenav = document.querySelector('.sidenav');
-    M.Sidenav.init(sidenav, {});
   }, [])
   // I used react router to make the app a single page application
   // https://stackoverflow.com/questions/65687852/fetch-data-inside-useeffect-hook-before-rendering-react, I used this to fetch the local storage data before rendering the app, here it might be a good idea but with a fetch request, it is not a good idea to fetch the data before rendering the app, because it might get stuck in the server side.
