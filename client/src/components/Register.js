@@ -31,6 +31,9 @@ const Register = () => {
             .then(response => {
                 if (response.status === 403) {
                     setError('Email or username already exists');
+                }else if  (response.status === 400)
+                {
+                    setError('Email or username is too long');
                 }
                 if (response.status === 200){
                     navigate('/login');

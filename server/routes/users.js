@@ -17,33 +17,46 @@ router.get('/', function(req, res, next) {
 });
 
 /* POST user registration */
+/* This route is not protected, anyone can register 
+    We will check if the email or username already exists, if not, then we will create the user
+*/
 router.post('/register', (req,res,next) => {
+    // Check if the email and username have a length of more than 100 characters
+    if (req.body.email.length > 100 || req.body.username.length > 100) {
+        return res.status(400).json({ // bad request
+            message: 'Email or username is too long'
+        });
+    }
+
     User.findOne({Email:req.body.email}, (err, user) => {
         if (err) throw err;
-        if (user) {
+        if (user) { // If the user exists, then we will return an error
             return res.status(403).json({
                 message: 'Email already exists'
             });
         }
-        User.findOne({Username:req.body.username}, (err, user) => {
+        User.findOne({Username:req.body.username}, (err, user) => { // Check if the username already exists
             if (err) throw err;
             if (user) {
                 return res.status(403).json({
                     message: 'Username already exists'
                 });
             }
-            bcrypt.genSalt(10, (err, salt) => {
+            /*
+                genSalt() generates a random string of characters to be used as a salt to hash the password
+            */
+            bcrypt.genSalt(10, (err, salt) => { 
                 if (err) throw err;
-                bcrypt.hash(req.body.password, salt, (err, hash) => {
-                    if (err) throw err;
-                    User.create({
+                bcrypt.hash(req.body.password, salt, (err, hash) => { // Hash the password using the salt generated
+                    if (err) throw err; 
+                    User.create({ // Create the user in the database
                         Username: req.body.username,
                         Password: hash,
                         Email: req.body.email,
                         Posts: [],
                         Comments: [],
                         DateCreated: Date.now()
-                    }, (err, user) => {
+                    }, (err, user) => { // We won't return the user object, just a message
                         if (err) throw err;
                         res.json({
                             message: 'User created'
@@ -57,18 +70,22 @@ router.post('/register', (req,res,next) => {
 });
 
 /* POST user login */
+/*
+    This route is not protected, anyone can login
+    We will check if the email exists, if it does, then we will compare the password
+*/
 router.post('/login', (req,res,next) => {
-    User.findOne({Email: req.body.email}, (err, user) => {
+    User.findOne({Email: req.body.email}, (err, user) => { // Check if the email exists
         if (err) throw err;
         if (!user) {
-            return res.status(401).json({
-                message: 'Login failed'
+            return res.status(401).json({ 
+                message: 'Login failed' // If the email doesn't exist, then we will return an error
             });
         }
 
-        bcrypt.compare(req.body.password, user.Password, (err, isMatch) => {
+        bcrypt.compare(req.body.password, user.Password, (err, isMatch) => { // Compare the password with the hash stored in the database
             if (err) throw err;
-            if (isMatch) {
+            if (isMatch) { // If the password matches, then we will create a JWT token
                 const jwtPayload = {
                     email: user.Email,
                     username: user.Username,
@@ -79,27 +96,29 @@ router.post('/login', (req,res,next) => {
                     jwtPayload,
                     process.env.SECRET,
                     {
-                        expiresIn: '2592000' // 1 month 30 days in seconds
+                        expiresIn: 2592000 // The token will expire in 1 month which is 2592000 seconds
                     },
                     (err, token) => {
                         if (err) throw err;
                         res.json({
                             success: true,
-                            token: 'Bearer ' + token
+                            token: 'Bearer ' + token // We will return a Bearer token to the user
                         });
                     }
                 )
             } else {
                 return res.status(401).json({
-                    message: 'Login failed'
+                    message: 'Login failed' // If the password doesn't match, then we will return an error
                 });
             }
+            // Notice that we are not returning an error if the email doesn't exist, this is to prevent possible attacks
         });
     });
 });
 
 
 /* GET username with id */
+/* May be used in the frontend to get the username of the user with the id */
 router.get('/username/:id', (req,res,next) => {
     User.findById(req.params.id, (err, user) => {
         if (err) throw err;
@@ -114,10 +133,10 @@ router.get('/username/:id', (req,res,next) => {
     });
 });
 
-/* GET user profile, returns user object with posts, comments, name, date created and bio (not implemented yet) */
+/* GET user profile, returns user object with posts, comments, name, date created and bio (if any) */
 router.get('/profile/:username', (req,res,next) => {
     User.findOne({
-        Username: req.params.username // change this to get it from body instead of params
+        Username: req.params.username // Find the user with the username
     }, async (err, user) => {
         if (err) throw err;
         if (!user) {
@@ -127,14 +146,14 @@ router.get('/profile/:username', (req,res,next) => {
         }
 
         let posts = await Posts.find({
-            CreatorId: user._id
+            CreatorId: user._id // Find all the posts with the user id
         });
         let comments = await Comments.find({
-            CreatorId: user._id
+            CreatorId: user._id // Find all the comments with the user id
         });
 
 
-        res.json({
+        res.json({ // Return the user object with the posts, comments, name, date created and bio
             Username: user.Username,
             Posts: posts,
             Comments: comments,
@@ -145,6 +164,7 @@ router.get('/profile/:username', (req,res,next) => {
 });
 
 /* POST check if user is logged in */
+/* This route is mainly used to check if the token is expired and if the token is valid */
 router.post('/check', checkAuth, (req,res,next) => {
     res.json({
         valid: true
@@ -152,45 +172,37 @@ router.post('/check', checkAuth, (req,res,next) => {
 });
 
 /* POST update user bio */
+/* We could use the PUT method, but I prefer to use POST  as the first time a user logs in, they will not have a bio and they will be posting a bio for the first time */
 router.post('/update/bio', checkAuth, (req,res,next) => {
     console.log(req.body);
+    // If bio is longer than 1000 characters, then we will return an error
+    if (req.body.bio.length > 1000) {
+        return res.status(403).json({
+            message: 'Bio is too long'
+        });
+    }
 
-    // Do not use findOneAndUpdate as it changes the date of the user
     User.findOne({
         Username: req.body.username
     }, (err, user) => {
         if (err) throw err;
         if (!user) {
             return res.status(404).json({
-                error: 'User not found'
+                error: 'User not found' // If the user doesn't exist, then we will return an error
             });
         }
-        user.Bio = req.body.bio;
-        user.save((err, user) => {
+        if (req.body.bio === '') { // If the bio is empty, then we will delete the bio
+            user.Bio = undefined;
+        } else {
+            user.Bio = req.body.bio; // Update the bio
+        }
+        user.save((err, user) => { // Save the user object with the updated bio
             if (err) throw err;
             res.json({
                 success: true
             });
         });
     });
-    /*
-
-
-    User.findOneAndUpdate({
-        Username: req.body.username
-    }, {
-        Bio: req.body.bio
-    }, (err, user) => {
-        if (err) throw err;
-        if (!user) {
-            return res.status(404).json({
-                error: 'User not found'
-            });
-        }
-        res.json({
-            success: true
-        });
-    });*/
 });
 
 

@@ -5,11 +5,11 @@ import PostPreview from './PostPreview';
 import Comments from './Comments';
 import moment from 'moment/moment';
 
-const Profile = () => {
+const Profile = ({ setUser, setJwt}) => {
   const navigate = useNavigate();
   // found this here: https://stackoverflow.com/questions/58409783/how-to-get-the-current-url-in-react-router
   const loc = useLocation();
-  const [user, setUser] = useState(null);
+  const [user, setUserLocal] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isLoggedUser, setIsLoggedUser] = useState(false);
@@ -54,6 +54,7 @@ const Profile = () => {
             }
           }
     }
+    
     const username = loc.pathname.split('/')[2];
     console.log(loc.pathname.split('/')[2])
 
@@ -77,7 +78,7 @@ const Profile = () => {
         return;
       }
 
-      setUser(data);
+      setUserLocal(data);
       console.log(user)
 
       setLoading(false);
@@ -108,10 +109,6 @@ const Profile = () => {
   const submitBio = (e) => {
     e.preventDefault();
     console.log(user)
-    if (bio === '') {
-      setAddingBio(false);
-      return;
-    }
 
     const jwt = localStorage.getItem('jwt');
     if (jwt === null) {
@@ -137,8 +134,13 @@ const Profile = () => {
             if (theresToken) { // Then the token is either expired or invalid 
                 localStorage.removeItem('jwt');
                 localStorage.removeItem('user'); // If there is a token, then there is a user with it
+
+                setUser(null);
+                setJwt('');
             }
             navigate('/login')
+          } else if (res.status === 403) {
+            setError('Your bio is too long, please keep it under 1000 characters');
           }
           return res.json();
     })
@@ -146,7 +148,7 @@ const Profile = () => {
       if (data.success) {
         console.log('bio updated')
         setAddingBio(false);
-        setUser(data.user);
+        setUserLocal(data.user);
         window.location.reload();
       }
     })
@@ -161,6 +163,14 @@ const Profile = () => {
           <h2>Loading...</h2>
         </div>
       )}
+      {
+        // User not found or something went wrong
+      }
+      {error && (
+        <div className="profile">
+          <h2>{error}</h2>
+        </div>
+      )}
       {user && (
         <div className="profile">
           <h2>{user.Username}</h2>
@@ -172,7 +182,7 @@ const Profile = () => {
             <div className="bio-form">
               <form onChange={handleChange} onSubmit={submitBio}>
                 <div className="input-field">
-                  <input name="bio" type="text" id="bio"  />
+                  <textarea className='materialize-textarea' name="bio" type="text" id="bio"  />
                 </div>
                 <button className="btn">Submit Bio</button>
               </form>
@@ -205,14 +215,7 @@ const Profile = () => {
           </div>
         </div>
       )}
-      {
-        // User not found or something went wrong
-      }
-      {error && (
-        <div className="profile">
-          <h2>{error}</h2>
-        </div>
-      )}
+
     </>
   )
 }

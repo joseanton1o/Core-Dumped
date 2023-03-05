@@ -5,7 +5,7 @@ import Comment from './Comment';
 import Comments from './Comments';
 import { Link, useLocation } from 'react-router-dom';
 // full display of a post
-const Post = ({jwt, user}) => {
+const Post = ({ setUser, setJwt ,jwt, user}) => {
     // found this here: https://stackoverflow.com/questions/58409783/how-to-get-the-current-url-in-react-router
     const loc = useLocation();
     const [post, setPost] = useState({})
@@ -47,7 +47,7 @@ const Post = ({jwt, user}) => {
                 <Comments comments={comments} cilcked={() => {}} classes={"post-comment pm"}/>
             </div>
             {/* Make a new comment to the post you are in */}
-            <Comment jwt={jwt} user={user} postId={loc.pathname.split('/')[2]} />
+            <Comment setUser={setUser} setJwt={setJwt} jwt={jwt} user={user} postId={loc.pathname.split('/')[2]} />
         </>
     )
 }
