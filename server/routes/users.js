@@ -32,6 +32,7 @@ router.post('/register', (req,res,next) => {
             message: 'Username cannot be "NULL"'
         });
     }
+    
 
     User.findOne({Email:req.body.email}, (err, user) => {
         if (err) throw err;
