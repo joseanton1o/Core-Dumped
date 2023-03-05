@@ -13,6 +13,7 @@
   "license": "MIT",
   "dependencies": {
     "concurrently": "^7.6.0",
+    "express-validator": "^6.15.0",
     "jquery": "^3.6.3",
     "materialize-css": "^1.0.0-rc.2",
     "moment": "^2.29.4",

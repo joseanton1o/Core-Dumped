@@ -10,6 +10,7 @@ const storage = multer.memoryStorage();
 const upload = multer({storage})
 const Posts = require('../models/Post');
 const Comments = require('../models/Comment');
+const {body, validationResult} = require('express-validator')
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
@@ -20,7 +21,15 @@ router.get('/', function(req, res, next) {
 /* This route is not protected, anyone can register 
     We will check if the email or username already exists, if not, then we will create the user
 */
-router.post('/register', (req,res,next) => {
+router.post('/register',
+            body('email').isEmail(),
+            (req,res,next) => {
+    const errors = validationResult(req);
+    if(!errors.isEmpty()){
+        return res.status(400).json({
+            message: 'Provide a valid email address'
+        });
+    }
     // Check if the email and username have a length of more than 100 characters
     if (req.body.email.length > 100 || req.body.username.length > 100) {
         return res.status(400).json({ // bad request
@@ -32,7 +41,7 @@ router.post('/register', (req,res,next) => {
             message: 'Username cannot be "NULL"'
         });
     }
-    
+
 
     User.findOne({Email:req.body.email}, (err, user) => {
         if (err) throw err;
