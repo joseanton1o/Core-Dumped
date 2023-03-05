@@ -7,8 +7,6 @@ import {BrowserRouter as Router, Routes, Route} from 'react-router-dom'
 import Home from './components/Home';
 import Post from './components/Post';
 import Ask from './components/Ask';
-import 'materialize-css/dist/css/materialize.min.css';
-import M from  'materialize-css/dist/js/materialize.min.js';
 import LogOut from './components/LogOut';
 import Profile from './components/Profile';
 
@@ -23,9 +21,6 @@ function App() {
   // https://stackoverflow.com/questions/67295681/react-componentdidmount-parsing-error-missing-semicolon
   useEffect(() => {
     // It is mandatory to initialize the sidenav before the setControlVar to false, otherwise the sidenav will not work
-    let sidenav = document.querySelector('.sidenav');
-    M.Sidenav.init(sidenav, {});
-
     setControlVar(false);
 
     console.log(localStorage.getItem("jwt"));

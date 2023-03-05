@@ -1,10 +1,15 @@
 import React, { useEffect } from 'react'
 import { Link } from 'react-router-dom';
+import 'materialize-css/dist/css/materialize.min.css';
+
+import M from  'materialize-css/dist/js/materialize.min.js';
+
 const Nav = ({ setJwt, setUser ,jwt,user}) => {
 
   useEffect(() => {
     // This is used to check if the token is valid, if it is not, then the user is logged out
-  
+    let sidenav = document.querySelector('.sidenav');
+    M.Sidenav.init(sidenav, {});
     if (jwt !== '' && user !== null)
     {
       console.log('Checking if the token is valid IN THE NAV BAR')
