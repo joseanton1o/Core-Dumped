@@ -71,6 +71,11 @@
   text-align: center;
 
 }
+.bio_display{
+  /* make text wrap */
+  word-wrap: break-word;
+}
+
 .own-prof{
   /* Add a tourquoise color to the text */
   color: #00bfa5;

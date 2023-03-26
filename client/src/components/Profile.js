@@ -179,7 +179,7 @@ const Profile = ({ setUser, setJwt}) => {
           {//https://momentjs.com/docs/
           }
           <p>{"User registered on: " + moment(user.DateCreated).format('MMMM Do YYYY, h:mm:ss a').replace('T', ' ').split('.')[0]}</p>
-          <p>{user.Bio}</p>
+          <p className='bio_display'>{user.Bio}</p>
           {addingBio && (
             <div className="bio-form">
               <form onChange={handleChange} onSubmit={submitBio}>
